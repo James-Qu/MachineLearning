@@ -3,10 +3,35 @@ import java.io.*;
 
 
 public class DTree {
+	public static ArrayList<String> importAttribute(){
+		//ArrayList<ArrayList<String>> data=new ArrayList<ArrayList<String>>();
 
+		File file=new File("training_set.csv");
+		FileReader fr=null;
+		//String line=null;
+		String[] temp=new String[20];
+		ArrayList<String> attribute=new ArrayList<String>();
+		try {
+			fr = new FileReader(file);
+			BufferedReader br=new BufferedReader(fr);
+			String line=br.readLine(); //Read attribute line
+			temp=line.split(",");
+			for(int i=0;i<temp.length;i++){
+				attribute.add(temp[i]);
+			}
+			br.close();
+			fr.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return attribute;
+	}
 	public static ArrayList<ArrayList<String>> importData(){
 		ArrayList<ArrayList<String>> data=new ArrayList<ArrayList<String>>();
-
 		File file=new File("training_set.csv");
 		FileReader fr;
 		String line=null;
@@ -99,4 +124,36 @@ class IG{
 		}
 		return 0;
 	}
+
+	//get column data of assigned attribute
+	public static ArrayList<String> getColumn(ArrayList<ArrayList<String>> data,int index){
+		ArrayList<String> column=new ArrayList<String>();
+		Iterator<ArrayList<String>> it=data.iterator();
+		while(it.hasNext()){
+			String temp=it.next().get(index);
+			column.add(temp);
+		}
+		return column;
+	}
+	
+	//count attribute data
+	public static Map<String,Integer> countData(ArrayList<ArrayList<String>> data,int index){
+		ArrayList<String> column=getColumn(data,index);
+		Iterator<String> it=column.iterator();
+		Map<String,Integer> dataMap=new HashMap<String,Integer>();
+		int zeroCount=0,oneCount=0;
+		while(it.hasNext()){
+			if(it.next().equals("1")){
+				oneCount++;
+			}else{
+				zeroCount++;
+			}
+		}
+		dataMap.put("0", zeroCount);
+		dataMap.put("1", oneCount);
+		return dataMap;
+	}
+	
+	//calculate the best attribute to split
+	
 }

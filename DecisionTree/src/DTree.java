@@ -3,10 +3,11 @@ import java.io.*;
 
 
 public class DTree {
+	//tested
 	public static ArrayList<String> importAttribute(){
 		//ArrayList<ArrayList<String>> data=new ArrayList<ArrayList<String>>();
 
-		File file=new File("training_set.csv");
+		File file=new File("src/training_set.csv");
 		FileReader fr=null;
 		//String line=null;
 		String[] temp=new String[20];
@@ -30,9 +31,11 @@ public class DTree {
 		}
 		return attribute;
 	}
+	
+	//tested
 	public static ArrayList<ArrayList<String>> importData(){
 		ArrayList<ArrayList<String>> data=new ArrayList<ArrayList<String>>();
-		File file=new File("training_set.csv");
+		File file=new File("src/training_set.csv");
 		FileReader fr;
 		String line=null;
 		try {
@@ -58,6 +61,28 @@ public class DTree {
 		}
 		return data;
 	}
+	
+	//count the last column, how many 0, how many 1, return a map
+	public Map<String,Integer> countLastColumn(ArrayList<ArrayList<String>> data){
+		
+		Map<String,Integer> result=new HashMap<String,Integer>(); //Store the result of the count
+		ArrayList<String> line=new ArrayList<String>(); 
+		int j=0;
+		int count=0;
+		while(data.size()>j){
+			line=data.get(j);
+			String temp=line.get(line.size()-1);
+			if(result.containsKey(temp)){
+				result.put(temp,result.get(temp)+1);
+			}else{
+				result.put(temp, 1);
+			}
+			j++;
+		}
+		return result;
+	}
+	
+	
 }
 
 class Node{
@@ -115,14 +140,15 @@ class IG{
 	}
 
 	//calculate initial entropy
-	public static double iniEntropy(ArrayList<ArrayList<String>> data){
-		if(data.size()==0){
-			return 0;
-		}else{
-			//Need a count function to get the probability
-
-		}
-		return 0;
+	public static double iniEntropy(int dataSize, Map<String,Integer> countMap){
+		double result=-1;
+		int zeroCount=countMap.get(0);
+		int oneCount=countMap.get(1);
+		double zeroProb=zeroCount/dataSize;
+		double oneProb=oneCount/dataSize;
+		result=-zeroProb*(Math.log(zeroProb)/Math.log(2))-oneProb*(Math.log(oneProb)/Math.log(2));
+		
+		return result;
 	}
 
 	//get column data of assigned attribute
@@ -154,6 +180,17 @@ class IG{
 		return dataMap;
 	}
 	
-	//calculate the best attribute to split
+	//Split data set based on attribute
+	public ArrayList<ArrayList<String>> splitDataSet(int attribute,String value){
+		ArrayList<ArrayList<String>> subDataSet=new ArrayList<ArrayList<String>>();
+		int j=0;
+		while(data.size()>j){
+			if(data.get(j).get(attribute).equals(value)){
+				subDataSet.add(data.get(j));
+			}
+			j++;
+		}
+		return subDataSet;
+	}
 	
 }

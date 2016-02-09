@@ -6,6 +6,10 @@ import java.util.Map;
 class IG{
 	private ArrayList<ArrayList<String>> data;
 	private ArrayList<String> attribute;
+	public IG(ArrayList<ArrayList<String>> data2, ArrayList<String> attributeList) {
+		this.data=data2;
+		this.attribute=attributeList;
+	}
 	public ArrayList<ArrayList<String>> getData() {
 		return data;
 	}
@@ -20,7 +24,7 @@ class IG{
 	}
 
 	//calculate initial entropy
-	public static double iniEntropy(int dataSize, Map<String,Integer> countMap){
+	public double iniEntropy(int dataSize, Map<String,Integer> countMap){
 		double result=-1;
 		int zeroCount=countMap.get(0);
 		int oneCount=countMap.get(1);

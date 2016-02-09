@@ -8,6 +8,7 @@ class Node{
 	private ArrayList<ArrayList<String>> data;
 	private ArrayList<String> attribute;
 	private ArrayList<String> splitOption;
+	private ArrayList<String> splitValue;
 	public String getName() {
 		return name;
 	}
@@ -49,5 +50,11 @@ class Node{
 	}
 	public void setLeaf(boolean isLeaf) {
 		this.isLeaf = isLeaf;
+	}
+	public ArrayList<String> getSplitValue() {
+		return splitValue;
+	}
+	public void setSplitValue(ArrayList<String> splitValue) {
+		this.splitValue = splitValue;
 	}
 }

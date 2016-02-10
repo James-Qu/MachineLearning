@@ -79,6 +79,7 @@ public class Test {
 		ArrayList<ArrayList<String>> data=DTree.importData();
 		ArrayList<String> attribute=DTree.importAttribute();
 		IG ig=new IG(data,attribute);
+		System.out.println("test splitDataSet:");
 		ArrayList<ArrayList<String>> result=ig.splitDataSet(1,Integer.toString(1));
 		for (ArrayList<String> l1 : result) {
 			for (String n : l1) {

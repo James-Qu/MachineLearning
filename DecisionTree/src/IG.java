@@ -131,11 +131,11 @@ class IG{
 
 		//Maybe not necessary
 		//DTree tree=new DTree();
-		Map<String,Integer> countMap;
+		/*Map<String,Integer> countMap;
 		int j=0;
 		int zeroCount=0,oneCount=0;
 		while(j<dataRange.size()){
-			/*int zeroCount=0,oneCount=0;*/
+			int zeroCount=0,oneCount=0;
 			ArrayList<ArrayList<String>> subDataSet=splitDataSet(attri, dataRange.get(j));
 			countMap=DTree.countLastColumn(subDataSet);
 			//Problem! Maybe null.
@@ -152,6 +152,31 @@ class IG{
 			double zeroProb=zeroCount/total;
 			double oneProb=oneCount/total;
 			result=-zeroProb*(Math.log(zeroProb)/Math.log(2))-oneProb*(Math.log(oneProb)/Math.log(2));
+		}*/
+		
+		DTree tree=new DTree();
+		Map<String,Integer> countMap;
+		double n1=0;
+		for(int i=0;i<dataRange.size();i++){
+			double zeroCount=0,oneCount=0;
+			ArrayList<ArrayList<String>> subDataSet=splitDataSet(attri, dataRange.get(i));
+			countMap=DTree.countLastColumn(subDataSet);
+			zeroCount=countMap.get(Integer.toString(0));
+			oneCount=countMap.get(Integer.toString(1));
+			
+			/*if(zeroCount==oneCount){
+				result=1;
+			}else if(zeroCount==0||oneCount==0){
+				result=0;
+			}else{
+				double total=zeroCount+oneCount;
+				double zeroProb=zeroCount/total;
+				double oneProb=oneCount/total;
+				result=-zeroProb*(Math.log(zeroProb)/Math.log(2))-oneProb*(Math.log(oneProb)/Math.log(2));
+			}*/
+			n1=(double)subDataSet.size()/data.size();
+			result+=n1*entropyCalculation(zeroCount, oneCount);
+			
 		}
 
 		return result;
@@ -173,6 +198,21 @@ class IG{
 		//At the same time, delete this best attribute from the attribute list
 		return chosenAttribute;
 	}
-
+	
+	//Entropy calculation
+	public static double entropyCalculation(double zeroCount,double oneCount){
+		double result=0;
+		if(zeroCount==oneCount){
+			result=1;
+		}else if(zeroCount==0||oneCount==0){
+			result=0;
+		}else{
+			double total=zeroCount+oneCount;
+			double zeroProb=zeroCount/total;
+			double oneProb=oneCount/total;
+			result=-zeroProb*(Math.log(zeroProb)/Math.log(2))-oneProb*(Math.log(oneProb)/Math.log(2));
+		}
+		return result;
+	}
 
 }

@@ -24,7 +24,7 @@ public class Main {
 		iniEntropy=ig.iniEntropy(data.size(), countMap);
 		chosenAttribute=ig.bestAttribute(iniEntropy);
 		
-		ArrayList<String> splitValue=ig.getRange(data, chosenAttribute);
+		ArrayList<String> splitValue=IG.getRange(data, chosenAttribute);
 		node.setSplitValue(splitValue);
 		
 		//set chosen attribute for the node

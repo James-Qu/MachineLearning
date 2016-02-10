@@ -187,11 +187,16 @@ class IG{
 		int chosenAttribute=-1;
 		double max=0,ig=0;
 		int j=0;
-		while(attributeList.size()>j){
+		String attributeName;
+		double secondBestIG;
+		
+		while(attributeList.size()-1>j){
 			max=iniEntropy-conditionalEntropy(j);
 			if(max>ig){
+				secondBestIG=ig;
 				ig=max;
 				chosenAttribute=j;
+				attributeName=attributeList.get(chosenAttribute);
 			}
 			j++;
 		}

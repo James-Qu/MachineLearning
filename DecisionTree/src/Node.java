@@ -2,14 +2,13 @@ import java.util.ArrayList;
 
 class Node{
 	private String name;
-	private String finalJudgement=null;
 	private Node[] parent;
 	private ArrayList<Node> child;
 	private boolean isLeaf=false;
 	private ArrayList<ArrayList<String>> data;
 	private ArrayList<String> attributeList;
 	private String splitOption;
-	private ArrayList<String> splitValue;
+	private ArrayList<String> splitRule;
 	public String getName() {
 		return name;
 	}
@@ -53,17 +52,12 @@ class Node{
 		this.isLeaf = isLeaf;
 	}
 	public ArrayList<String> getSplitValue() {
-		return splitValue;
+		return splitRule;
 	}
 	public void setSplitValue(ArrayList<String> splitValue) {
-		this.splitValue = splitValue;
+		this.splitRule = splitValue;
 	}
-	public String getFinalJudgement() {
-		return finalJudgement;
-	}
-	public void setFinalJudgement(String finalJudgement) {
-		this.finalJudgement = finalJudgement;
-	}
+
 	
 	
 }

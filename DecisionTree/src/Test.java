@@ -12,7 +12,8 @@ public class Test {
 		//testSplitDataSet();
 		//testCountLastColumn();
 		//testIniEntropy();
-		testConditionalEntropy();
+		//testConditionalEntropy();
+		testBestAttribute();
 	}
 
 	//test importAttribute()
@@ -114,5 +115,18 @@ public class Test {
 		double result=ig.conditionalEntropy(1);
 		System.out.println("choosing the first attribute to split: "+result);
 	}
+	
+	//test bestAttribute
+	public static void testBestAttribute(){
+		IG ig=new IG(data,attribute);
+		Map<String,Integer> resultMap=DTree.countLastColumn(data);
+		double result=ig.iniEntropy(data.size(), resultMap);
+		int bestAttributeIndex=ig.bestAttribute(result);
+		System.out.println("test bestAttribute");
+		System.out.println("The best attribute index is: "+bestAttributeIndex);
+		System.out.println("The attribute name is: "+attribute.get(bestAttributeIndex));
+		
+	}
+	
 	
 }

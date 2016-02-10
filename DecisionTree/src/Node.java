@@ -2,12 +2,13 @@ import java.util.ArrayList;
 
 class Node{
 	private String name;
+	private String finalJudgement=null;
 	private Node[] parent;
-	private Node[] child;
-	private boolean isLeaf;
+	private ArrayList<Node> child;
+	private boolean isLeaf=false;
 	private ArrayList<ArrayList<String>> data;
-	private ArrayList<String> attribute;
-	private ArrayList<String> splitOption;
+	private ArrayList<String> attributeList;
+	private String splitOption;
 	private ArrayList<String> splitValue;
 	public String getName() {
 		return name;
@@ -21,10 +22,10 @@ class Node{
 	public void setParent(Node[] parent) {
 		this.parent = parent;
 	}
-	public Node[] getChild() {
+	public ArrayList<Node> getChild() {
 		return child;
 	}
-	public void setChild(Node[] child) {
+	public void setChild(ArrayList<Node> child) {
 		this.child = child;
 	}
 	public ArrayList<ArrayList<String>> getData() {
@@ -34,15 +35,15 @@ class Node{
 		this.data = data;
 	}
 	public ArrayList<String> getAttribute() {
-		return attribute;
+		return attributeList;
 	}
 	public void setAttribute(ArrayList<String> attribute) {
-		this.attribute = attribute;
+		this.attributeList = attribute;
 	}
-	public ArrayList<String> getSplitOption() {
+	public String getSplitOption() {
 		return splitOption;
 	}
-	public void setSplitOption(ArrayList<String> splitOption) {
+	public void setSplitOption(String splitOption) {
 		this.splitOption = splitOption;
 	}
 	public boolean isLeaf() {
@@ -57,4 +58,12 @@ class Node{
 	public void setSplitValue(ArrayList<String> splitValue) {
 		this.splitValue = splitValue;
 	}
+	public String getFinalJudgement() {
+		return finalJudgement;
+	}
+	public void setFinalJudgement(String finalJudgement) {
+		this.finalJudgement = finalJudgement;
+	}
+	
+	
 }

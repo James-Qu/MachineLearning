@@ -95,32 +95,6 @@ class IG{
 	public double conditionalEntropy(int attri){
 		double result=0;
 		ArrayList<String> dataRange=getRange(data, attri); //see what the value range is(0 or 1 or both)
-
-		//Maybe not necessary
-		//DTree tree=new DTree();
-		/*Map<String,Integer> countMap;
-		int j=0;
-		int zeroCount=0,oneCount=0;
-		while(j<dataRange.size()){
-			int zeroCount=0,oneCount=0;
-			ArrayList<ArrayList<String>> subDataSet=splitDataSet(attri, dataRange.get(j));
-			countMap=DTree.countLastColumn(subDataSet);
-			//Problem! Maybe null.
-			zeroCount=countMap.get(0);
-			oneCount=countMap.get(1);
-			j++;
-		}
-		if(zeroCount==oneCount){
-			result=1;
-		}else if(zeroCount==0||oneCount==0){
-			result=0;
-		}else{
-			int total=zeroCount+oneCount;
-			double zeroProb=zeroCount/total;
-			double oneProb=oneCount/total;
-			result=-zeroProb*(Math.log(zeroProb)/Math.log(2))-oneProb*(Math.log(oneProb)/Math.log(2));
-		}*/
-		
 		DTree tree=new DTree();
 		Map<String,Integer> countMap;
 		double n1=0;
@@ -131,16 +105,6 @@ class IG{
 			zeroCount=countMap.get(Integer.toString(0));
 			oneCount=countMap.get(Integer.toString(1));
 			
-			/*if(zeroCount==oneCount){
-				result=1;
-			}else if(zeroCount==0||oneCount==0){
-				result=0;
-			}else{
-				double total=zeroCount+oneCount;
-				double zeroProb=zeroCount/total;
-				double oneProb=oneCount/total;
-				result=-zeroProb*(Math.log(zeroProb)/Math.log(2))-oneProb*(Math.log(oneProb)/Math.log(2));
-			}*/
 			n1=(double)subDataSet.size()/data.size();
 			result+=n1*entropyCalculation(zeroCount, oneCount);
 			
@@ -159,6 +123,7 @@ class IG{
 		
 		while(attributeList.size()-1>j){
 			max=iniEntropy-conditionalEntropy(j);
+			System.out.println(max  + "|" + ig);
 			if(max>ig){
 				secondBestIG=ig;
 				ig=max;
@@ -166,8 +131,11 @@ class IG{
 				attributeName=attributeList.get(chosenAttribute);
 			}
 			j++;
+			System.out.println("chosenAttribute is:"+chosenAttribute);
 		}
-		//At the same time, delete this best attribute from the attribute list
+		if(chosenAttribute==-1){
+			chosenAttribute=0;
+		}
 		return chosenAttribute;
 	}
 	

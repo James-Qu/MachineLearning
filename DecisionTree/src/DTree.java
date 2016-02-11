@@ -100,7 +100,7 @@ public class DTree {
 		return false;
 	}
 
-	public Node createDTree(ArrayList<ArrayList<String>> data,ArrayList<String> attributeList){
+	/*public Node createDTree(ArrayList<ArrayList<String>> data,ArrayList<String> attributeList){
 		Node node=new Node();
 		node.setData(data);
 		node.setAttribute(attributeList);
@@ -109,10 +109,8 @@ public class DTree {
 		int chosenAttribute=-1;
 		//Node is pure
 		//we need to scan the map to see if there is a 0 value count instead of using countMap.size<2
-		//if(countMap.size()<2){
 		if(scanCountMap(countMap)){
-			//node.setName(Integer.toString(nodeNumberSetter++));
-			//Map.Entry<String, Integer> entry=countMap.entrySet();
+			//divide(node, countMap);
 			for(Map.Entry<String, Integer> entry:countMap.entrySet()){
 				if(entry.getValue()>0){
 					if(entry.getKey().equals("0")){
@@ -133,12 +131,23 @@ public class DTree {
 		IG ig=new IG(data,attributeList);
 		iniEntropy=ig.iniEntropy(data.size(), countMap);
 		if(!Double.isNaN(iniEntropy)){
+			//if(chosenAttribute!=-1){
 			chosenAttribute=ig.bestAttribute(iniEntropy);
+			//}else{
+			if(chosenAttribute==-1){
+				node.setLeaf(true);
+				node.setlChild(null);
+				node.setrChild(null);
+				return node;
+			}
+			return node;
+			//}
 		}
 		ArrayList<String> splitValue=IG.getRange(data, chosenAttribute);
 		node.setSplitValue(splitValue); 
 		//set chosen attribute for the node
 		node.setSplitOption(attributeList.get(chosenAttribute));
+		node.setName(attributeList.get(chosenAttribute));
 		//delete chosenattribute from the list
 		attributeList.remove(chosenAttribute);
 
@@ -147,11 +156,11 @@ public class DTree {
 			String value=splitValue.get(j);
 			ArrayList<ArrayList<String>> subData=ig.splitDataSet(chosenAttribute, value);
 			if(attributeList.size()==0){
-				Node leaf=new Node();
+				//Node leaf=new Node();
 				node.setName(Integer.toString(getMajority(countMap)));
-				leaf.setLeaf(true);
-				leaf.setlChild(null);
-				leaf.setrChild(null);
+				node.setLeaf(true);
+				node.setlChild(null);
+				node.setrChild(null);
 				if(Integer.parseInt(value)==1){
 					node.setrChild(leaf);;
 				}else{
@@ -170,6 +179,20 @@ public class DTree {
 		}
 
 		return node;
+	}*/
+
+	private void divide(Node node, Map<String, Integer> countMap) {
+		for(Map.Entry<String, Integer> entry:countMap.entrySet()){
+			if(entry.getValue()>0){
+				if(entry.getKey().equals("0")){
+					node.setName("0");
+					break;
+				}else{
+					node.setName("1");
+					break;
+				}
+			}
+		}
 	}
 
 	//get majority when attribute all used.
@@ -189,4 +212,91 @@ public class DTree {
 		return max;
 	}
 
+	public void printTree(Node root,Node lChild,Node rChild){
+
+	}
+
+	public Node createTree(ArrayList<ArrayList<String>> data,
+			ArrayList<String> attributes){
+		//create a root node for tree
+		Node node=new Node();
+		node.setData(data);
+		node.setAttributeList(attributes);
+		int chosenAttribute=-1;
+		Map<String,Integer> countMap=DTree.countLastColumn(data);
+
+		//if all data + or -, return single node
+		if(scanCountMap(countMap)){
+			//divide(node, countMap);
+			for(Map.Entry<String, Integer> entry:countMap.entrySet()){
+				if(entry.getValue()>0){
+					if(entry.getKey().equals("0")){
+						node.setName("0");
+						node.setLabel("0");
+						break;
+					}else{
+						node.setName("1");
+						node.setLabel("1");
+						break;
+					}
+				}
+			}
+			node.setLeaf(true);
+			node.setChild(null);
+
+			return node;
+		}
+
+		//if attributes empty. return single node
+		if(attributes.size()==0){
+			node.setName(Integer.toString(getMajority(countMap)));
+			node.setLabel(Integer.toString(getMajority(countMap)));
+			node.setLeaf(true);
+			node.setChild(null);
+		}
+
+		//Otherwise part
+		IG ig=new IG(data,attributes);
+		double iniEntropy=ig.iniEntropy(data.size(), countMap);
+		if(!Double.isNaN(iniEntropy)){
+			//if(chosenAttribute!=-1){
+			chosenAttribute=ig.bestAttribute(iniEntropy);
+			//}else{
+			/*if(chosenAttribute==-1){
+				node.setLeaf(true);
+				node.setChild(null);
+				//return node;
+			}*/
+			//return node;
+			//}
+		}
+
+		ArrayList<String> splitValue=IG.getRange(data, chosenAttribute);
+		node.setSplitValue(splitValue); 
+		int j=0;
+		while(splitValue.size()>j){
+			String value=splitValue.get(j);
+			ArrayList<ArrayList<String>> subData=ig.splitDataSet(chosenAttribute, value);
+			for(int i=0;i<subData.size();i++){
+				subData.get(i).remove(chosenAttribute);
+			}
+			if(subData.size()==0){
+				Node leaf=new Node();
+				leaf.setName(Integer.toString(getMajority(countMap)));
+				leaf.setLabel(Integer.toString(getMajority(countMap)));
+				leaf.setLeaf(true);
+				//leaf.setChild(null);
+			}else{
+				if(attributes.size()!=0){
+					attributes.remove(chosenAttribute);
+				}
+				if(node.isLeaf()==false){
+					node.getChild().add(
+							createTree(subData,attributes));
+				}
+			}
+			j++;
+		}
+		return node;
+	}
 }

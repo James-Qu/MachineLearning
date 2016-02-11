@@ -6,7 +6,6 @@ public class Main {
 		ArrayList<ArrayList<String>> data=DTree.importData();
 		ArrayList<String> attributeList=DTree.importAttribute();
 		DTree decisionTree=new DTree();
-		decisionTree.createDTree(data, attributeList);
+		decisionTree.createTree(data, attributeList);
 	}
-	
 }

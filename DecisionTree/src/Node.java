@@ -2,12 +2,12 @@ import java.util.ArrayList;
 
 class Node{
 	private String name; //split attribute name
-	private Node lChild;
-	private Node rChild;
+	private String label;
+	private ArrayList<Node> child=new ArrayList<Node>();
 	private boolean isLeaf=false;
 	private ArrayList<ArrayList<String>> data;
 	private ArrayList<String> attributeList;
-	private String splitOption;
+	private String splitOption; 
 	private ArrayList<String> splitRule;
 	public String getName() {
 		return name;
@@ -16,18 +16,7 @@ class Node{
 		this.name = name;
 	}
 
-	public Node getlChild() {
-		return lChild;
-	}
-	public void setlChild(Node lChild) {
-		this.lChild = lChild;
-	}
-	public Node getrChild() {
-		return rChild;
-	}
-	public void setrChild(Node rChild) {
-		this.rChild = rChild;
-	}
+	
 	public ArrayList<String> getAttributeList() {
 		return attributeList;
 	}
@@ -69,6 +58,18 @@ class Node{
 	}
 	public void setSplitValue(ArrayList<String> splitValue) {
 		this.splitRule = splitValue;
+	}
+	public String getLabel() {
+		return label;
+	}
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	public ArrayList<Node> getChild() {
+		return child;
+	}
+	public void setChild(ArrayList<Node> child) {
+		this.child = child;
 	}
 
 	

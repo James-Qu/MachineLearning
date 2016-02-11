@@ -34,8 +34,8 @@ public class DTree {
 	}
 
 	//tested
-	public static ArrayList<ArrayList<String>> importData(){
-		ArrayList<ArrayList<String>> data=new ArrayList<ArrayList<String>>();
+	public static ArrayList<Map<String, Integer>> importData(){
+		ArrayList<Map<String, Integer>> data=new ArrayList<Map<String,Integer>>();
 		File file=new File("src/training_set.csv");
 		FileReader fr;
 		String line=null;

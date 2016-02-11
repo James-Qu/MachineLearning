@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
 class Node{
-	private String name;
-	private Node[] parent;
-	private ArrayList<Node> child;
+	private String name; //split attribute name
+	private Node lChild;
+	private Node rChild;
 	private boolean isLeaf=false;
 	private ArrayList<ArrayList<String>> data;
 	private ArrayList<String> attributeList;
@@ -15,17 +15,30 @@ class Node{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Node[] getParent() {
-		return parent;
+
+	public Node getlChild() {
+		return lChild;
 	}
-	public void setParent(Node[] parent) {
-		this.parent = parent;
+	public void setlChild(Node lChild) {
+		this.lChild = lChild;
 	}
-	public ArrayList<Node> getChild() {
-		return child;
+	public Node getrChild() {
+		return rChild;
 	}
-	public void setChild(ArrayList<Node> child) {
-		this.child = child;
+	public void setrChild(Node rChild) {
+		this.rChild = rChild;
+	}
+	public ArrayList<String> getAttributeList() {
+		return attributeList;
+	}
+	public void setAttributeList(ArrayList<String> attributeList) {
+		this.attributeList = attributeList;
+	}
+	public ArrayList<String> getSplitRule() {
+		return splitRule;
+	}
+	public void setSplitRule(ArrayList<String> splitRule) {
+		this.splitRule = splitRule;
 	}
 	public ArrayList<ArrayList<String>> getData() {
 		return data;

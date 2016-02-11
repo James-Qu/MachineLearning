@@ -46,25 +46,6 @@ class IG{
 
 	//get column data of assigned attribute
 	public static ArrayList<String> getRange(ArrayList<ArrayList<String>> data,int index){
-		/*ArrayList<String> column=new ArrayList<String>();
-		Iterator<ArrayList<String>> it=data.iterator();
-		while(it.hasNext()){
-			String temp=it.next().get(index);
-			if(!column.contains(temp))
-			column.add(temp);
-		}*/
-		
-		/*ArrayList<String> range=new ArrayList<String>();
-		String specificData="";
-		int j=0;
-		while(data.size()>j){
-			specificData=data.get(index).get(j);
-			if(!range.contains(specificData)){
-				range.add(specificData);
-			}
-			j++;
-		}*/
-		
 		ArrayList<String> range=new ArrayList<String>();
 		ArrayList<String> line=new ArrayList<String>();
 		String spcificData="";
@@ -80,20 +61,6 @@ class IG{
 
 	//count attribute data
 	public static Map<String,Integer> countData(ArrayList<ArrayList<String>> data,int index){
-		/*ArrayList<String> column=getRange(data,index);
-		Iterator<String> it=column.iterator();
-		Map<String,Integer> dataMap=new HashMap<String,Integer>();
-		int zeroCount=0,oneCount=0;
-		while(it.hasNext()){
-			if(it.next().equals("1")){
-				oneCount++;
-			}else{
-				zeroCount++;
-			}
-		}
-		dataMap.put("0", zeroCount);
-		dataMap.put("1", oneCount);*/
-		
 		ArrayList<String> instance=getRange(data,index);
 		Map<String,Integer> dataMap=new HashMap<String,Integer>();
 		String specificData;

@@ -3,9 +3,10 @@ import java.util.Map;
 
 public class Main {
 	public static void main(String[] args) {
-		ArrayList<ArrayList<String>> data=DTree.importData();
+		ArrayList<Map<String, Integer>> data=DTree.importData();
 		ArrayList<String> attributeList=DTree.importAttribute();
 		DTree decisionTree=new DTree();
-		decisionTree.createTree(data, attributeList);
+		Node root=decisionTree.createTree(data, attributeList);
+		decisionTree.printTree(root,0);
 	}
 }

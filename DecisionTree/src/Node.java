@@ -1,14 +1,16 @@
 import java.util.ArrayList;
+import java.util.Map;
 
 class Node{
 	private String name; //split attribute name
 	private String label;
 	private ArrayList<Node> child=new ArrayList<Node>();
 	private boolean isLeaf=false;
-	private ArrayList<ArrayList<String>> data;
+	private ArrayList<Map<String, Integer>> data;
 	private ArrayList<String> attributeList;
 	private String splitOption; 
-	private ArrayList<String> splitRule;
+	private ArrayList<String> splitValue;
+	private int upperBranchValue;
 	public String getName() {
 		return name;
 	}
@@ -23,16 +25,10 @@ class Node{
 	public void setAttributeList(ArrayList<String> attributeList) {
 		this.attributeList = attributeList;
 	}
-	public ArrayList<String> getSplitRule() {
-		return splitRule;
-	}
-	public void setSplitRule(ArrayList<String> splitRule) {
-		this.splitRule = splitRule;
-	}
-	public ArrayList<ArrayList<String>> getData() {
+	public ArrayList<Map<String, Integer>> getData() {
 		return data;
 	}
-	public void setData(ArrayList<ArrayList<String>> data) {
+	public void setData(ArrayList<Map<String, Integer>> data) {
 		this.data = data;
 	}
 	public ArrayList<String> getAttribute() {
@@ -54,10 +50,10 @@ class Node{
 		this.isLeaf = isLeaf;
 	}
 	public ArrayList<String> getSplitValue() {
-		return splitRule;
+		return splitValue;
 	}
 	public void setSplitValue(ArrayList<String> splitValue) {
-		this.splitRule = splitValue;
+		this.splitValue = splitValue;
 	}
 	public String getLabel() {
 		return label;
@@ -70,6 +66,12 @@ class Node{
 	}
 	public void setChild(ArrayList<Node> child) {
 		this.child = child;
+	}
+	public int getUpperBranchValue() {
+		return upperBranchValue;
+	}
+	public void setUpperBranchValue(int upperBranchValue) {
+		this.upperBranchValue = upperBranchValue;
 	}
 
 	

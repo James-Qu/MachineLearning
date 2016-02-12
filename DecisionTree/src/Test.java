@@ -2,10 +2,10 @@ import java.util.*;
 
 
 public class Test {
-	private static ArrayList<ArrayList<String>> data=DTree.importData();
+	private static ArrayList<Map<String,Integer>> data=DTree.importData();
 	private static ArrayList<String> attribute=DTree.importAttribute();
 	public static void main(String[] args) {
-		//testImportAttribute();
+		testImportAttribute();
 		//testImportData();
 		//testGetRange();
 		//testCountData();
@@ -13,7 +13,7 @@ public class Test {
 		//testCountLastColumn();
 		//testIniEntropy();
 		//testConditionalEntropy();
-		testBestAttribute();
+		//testBestAttribute();
 	}
 
 	//test importAttribute()
@@ -30,7 +30,7 @@ public class Test {
 	//test importData()
 	public static void testImportData(){
 		//test import data
-		ArrayList<ArrayList<String>> Data=DTree.importData();
+		ArrayList<Map<String,Integer>> Data=DTree.importData();
 		/*Iterator<ArrayList<String>> it1=Data.iterator();
 				while(it1.hasNext()){
 					for(int i=0;i<it1.next().size();i++){
@@ -45,9 +45,9 @@ public class Test {
 					}
 				}*/
 		System.out.println("import data test");
-		for (ArrayList<String> l1 : Data) {
-			for (String n : l1) {
-				System.out.print(n + " "); 
+		for (Map<String,Integer> l1 : Data) {
+			for (Map.Entry<String, Integer> entry:l1.entrySet()) {
+				System.out.print(/*"Key: " +*/entry.getKey()+ " "+entry.getValue()+" "); 
 			}
 
 			System.out.println();
@@ -56,9 +56,9 @@ public class Test {
 
 	//test getRange()
 	public static void testGetRange(){
-		ArrayList<ArrayList<String>> data=DTree.importData();
-		ArrayList<String> result=IG.getRange(data, 2);
-		System.out.println("getRange test: column2");
+		ArrayList<Map<String,Integer>> data=DTree.importData();
+		ArrayList<String> result=IG.getRange(data, "XM");
+		System.out.println("getRange test: column XM");
 		for(String i:result){
 			System.out.print(i+" ");
 		}
@@ -67,9 +67,9 @@ public class Test {
 	
 	//test count data
 	public static void testCountData(){
-		ArrayList<ArrayList<String>> data=DTree.importData();
-		Map<String,Integer> resultMap=IG.countData(data, 1);
-		System.out.println("countData test: column2");
+		ArrayList<Map<String,Integer>> data=DTree.importData();
+		Map<String,Integer> resultMap=IG.countData(data, "XM");
+		System.out.println("countData test: Class");
 		for(Map.Entry<String, Integer> entry: resultMap.entrySet()){
 			System.out.println("Key: "+entry.getKey()+" value: "+entry.getValue());
 		}
@@ -77,14 +77,14 @@ public class Test {
 	
 	//test splitDataSet
 	public static void testSplitDataSet(){
-		ArrayList<ArrayList<String>> data=DTree.importData();
+		ArrayList<Map<String,Integer>> data=DTree.importData();
 		ArrayList<String> attribute=DTree.importAttribute();
 		IG ig=new IG(data,attribute);
-		System.out.println("test splitDataSet:");
-		ArrayList<ArrayList<String>> result=ig.splitDataSet(1,Integer.toString(1));
-		for (ArrayList<String> l1 : result) {
-			for (String n : l1) {
-				System.out.print(n + " "); 
+		System.out.println("test splitDataSet on Class:");
+		ArrayList<Map<String,Integer>> result=ig.splitDataSet("Class",Integer.toString(1));
+		for (Map<String, Integer> l1 : result) {
+			for (Map.Entry<String, Integer> entry: l1.entrySet()) {
+				System.out.print("Key: " +entry.getKey()+ "value: "+entry.getValue()); 
 			}
 
 			System.out.println();
@@ -102,6 +102,7 @@ public class Test {
 	
 	//test iniEntropy
 	public static void testIniEntropy(){
+		ArrayList<Map<String,Integer>> data=DTree.importData();
 		Map<String,Integer> resultMap=DTree.countLastColumn(data);
 		IG ig=new IG(data,attribute);
 		double result=ig.iniEntropy(data.size(), resultMap);
@@ -111,20 +112,21 @@ public class Test {
 	
 	//test conditionalEntropy
 	public static void testConditionalEntropy(){
+		ArrayList<Map<String,Integer>> data=DTree.importData();
 		IG ig=new IG(data,attribute);
-		double result=ig.conditionalEntropy(1);
+		double result=ig.conditionalEntropy("Class");
 		System.out.println("choosing the first attribute to split: "+result);
 	}
 	
 	//test bestAttribute
 	public static void testBestAttribute(){
+		ArrayList<Map<String,Integer>> data=DTree.importData();
 		IG ig=new IG(data,attribute);
 		Map<String,Integer> resultMap=DTree.countLastColumn(data);
 		double result=ig.iniEntropy(data.size(), resultMap);
-		int bestAttributeIndex=ig.bestAttribute(result);
+		String bestAttributeKey=ig.bestAttribute(result,attribute);
 		System.out.println("test bestAttribute");
-		System.out.println("The best attribute index is: "+bestAttributeIndex);
-		System.out.println("The attribute name is: "+attribute.get(bestAttributeIndex));
+		System.out.println("The best attribute index is: "+bestAttributeKey);
 		
 	}
 	

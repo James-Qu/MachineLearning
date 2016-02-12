@@ -18,7 +18,7 @@ public class DTree {
 			BufferedReader br=new BufferedReader(fr);
 			String line=br.readLine(); //Read attribute line
 			temp=line.split(",");
-			for(int i=0;i<temp.length;i++){
+			for(int i=0;i<temp.length-1;i++){
 				attribute.add(temp[i]);
 			}
 			br.close();
@@ -39,15 +39,24 @@ public class DTree {
 		File file=new File("src/training_set.csv");
 		FileReader fr;
 		String line=null;
+		String[] temp=new String[21];
+		ArrayList<String> attribute=new ArrayList<String>();
 		try {
 			fr = new FileReader(file);
 			BufferedReader br=new BufferedReader(fr);
-			br.readLine(); //skip attribute line
+			line=br.readLine(); //skip attribute line
+			temp=line.split(",");
+			for(int i=0;i<temp.length;i++){
+				attribute.add(temp[i]);
+			}
+			
 			while((line=br.readLine())!=null){
-				String[] temp=line.split(",");
-				ArrayList<String> record = new ArrayList<String>();
-				for(int i=0;i<temp.length;i++){
-					record.add(temp[i]);
+				String[] temp1=line.split(",");
+				//ArrayList<String> record = new ArrayList<String>();
+				Map<String,Integer> record=new HashMap<String,Integer>();
+				for(int i=0;i<temp1.length;i++){
+					//record.add(temp1[i]);
+					record.put(temp[i], Integer.parseInt(temp1[i]));
 				}
 				data.add(record);
 			}
@@ -64,15 +73,15 @@ public class DTree {
 	}
 
 	//count the last column, how many 0, how many 1, return a map
-	public static Map<String,Integer> countLastColumn(ArrayList<ArrayList<String>> data){
+	public static Map<String,Integer> countLastColumn(ArrayList<Map<String, Integer>> data){
 
 		Map<String,Integer> result=new HashMap<String,Integer>(); //Store the result of the count
-		ArrayList<String> line=new ArrayList<String>(); 
+		Map<String, Integer> record=new HashMap<String,Integer>(); 
 		int j=0;
 		int count=0;
 		while(data.size()>j){
-			line=data.get(j);
-			String temp=line.get(line.size()-1);
+			record=data.get(j);
+			String temp=record.get("Class").toString();
 			if(result.containsKey(temp)){
 				result.put(temp,result.get(temp)+1);
 			}else{
@@ -177,7 +186,7 @@ public class DTree {
 			}
 			j++;
 		}
-
+		
 		return node;
 	}*/
 
@@ -212,17 +221,30 @@ public class DTree {
 		return max;
 	}
 
-	public void printTree(Node root,Node lChild,Node rChild){
-
+	public void printTree(Node root,int level){
+		for(int i=0;i<level;i++){
+			System.out.print("-");
+		}
+		if(root==null){
+			System.out.println("null root");
+			return;
+		}
+		System.out.println(root.getName());
+		if(root.isLeaf()){
+			return;
+		}
+		for(int i=0;i<root.getChild().size();i++){
+			printTree(root.getChild().get(i),level+1);
+		}
 	}
 
-	public Node createTree(ArrayList<ArrayList<String>> data,
+	public Node createTree(ArrayList<Map<String, Integer>> data,
 			ArrayList<String> attributes){
 		//create a root node for tree
 		Node node=new Node();
 		node.setData(data);
 		node.setAttributeList(attributes);
-		int chosenAttribute=-1;
+		String chosenAttribute = "";
 		Map<String,Integer> countMap=DTree.countLastColumn(data);
 
 		//if all data + or -, return single node
@@ -231,11 +253,11 @@ public class DTree {
 			for(Map.Entry<String, Integer> entry:countMap.entrySet()){
 				if(entry.getValue()>0){
 					if(entry.getKey().equals("0")){
-						node.setName("0");
+						node.setName("leaf");
 						node.setLabel("0");
 						break;
 					}else{
-						node.setName("1");
+						node.setName("leaf");
 						node.setLabel("1");
 						break;
 					}
@@ -253,33 +275,26 @@ public class DTree {
 			node.setLabel(Integer.toString(getMajority(countMap)));
 			node.setLeaf(true);
 			node.setChild(null);
+			return node;
 		}
 
 		//Otherwise part
 		IG ig=new IG(data,attributes);
 		double iniEntropy=ig.iniEntropy(data.size(), countMap);
-		if(!Double.isNaN(iniEntropy)){
-			//if(chosenAttribute!=-1){
-			chosenAttribute=ig.bestAttribute(iniEntropy);
-			//}else{
-			/*if(chosenAttribute==-1){
-				node.setLeaf(true);
-				node.setChild(null);
-				//return node;
-			}*/
-			//return node;
-			//}
-		}
+		//if(!Double.isNaN(iniEntropy)){
+			chosenAttribute=ig.bestAttribute(iniEntropy,attributes);
+			
+		//}
 
 		ArrayList<String> splitValue=IG.getRange(data, chosenAttribute);
 		node.setSplitValue(splitValue); 
 		int j=0;
 		while(splitValue.size()>j){
 			String value=splitValue.get(j);
-			ArrayList<ArrayList<String>> subData=ig.splitDataSet(chosenAttribute, value);
-			for(int i=0;i<subData.size();i++){
+			ArrayList<Map<String,Integer>> subData=ig.splitDataSet(chosenAttribute, value);
+			/*for(int i=0;i<subData.size();i++){
 				subData.get(i).remove(chosenAttribute);
-			}
+			}*/
 			if(subData.size()==0){
 				Node leaf=new Node();
 				leaf.setName(Integer.toString(getMajority(countMap)));
@@ -287,6 +302,7 @@ public class DTree {
 				leaf.setLeaf(true);
 				//leaf.setChild(null);
 			}else{
+					node.setName(chosenAttribute);
 				if(attributes.size()!=0){
 					attributes.remove(chosenAttribute);
 				}

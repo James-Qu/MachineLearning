@@ -5,15 +5,16 @@ public class Test {
 	private static ArrayList<Map<String,Integer>> data=DTree.importData();
 	private static ArrayList<String> attribute=DTree.importAttribute();
 	public static void main(String[] args) {
-		testImportAttribute();
+		//testImportAttribute();
 		//testImportData();
-		//testGetRange();
+		testGetRange();
 		//testCountData();
 		//testSplitDataSet();
 		//testCountLastColumn();
 		//testIniEntropy();
 		//testConditionalEntropy();
 		//testBestAttribute();
+		//testGetBestAttribute();
 	}
 
 	//test importAttribute()
@@ -31,19 +32,6 @@ public class Test {
 	public static void testImportData(){
 		//test import data
 		ArrayList<Map<String,Integer>> Data=DTree.importData();
-		/*Iterator<ArrayList<String>> it1=Data.iterator();
-				while(it1.hasNext()){
-					for(int i=0;i<it1.next().size();i++){
-						System.out.print(it1.next().get(i)+" ");
-					}
-				}*/
-
-		/*for(int i=0;i<Data.size();i++){
-					ArrayList<String> record=Data.get(i);
-					for(int n=0;n<record.size();n++){
-						System.out.print(record.get(n)+" ");
-					}
-				}*/
 		System.out.println("import data test");
 		for (Map<String,Integer> l1 : Data) {
 			for (Map.Entry<String, Integer> entry:l1.entrySet()) {
@@ -52,12 +40,14 @@ public class Test {
 
 			System.out.println();
 		} 
+		System.out.println(data.size());
 	}
 
 	//test getRange()
 	public static void testGetRange(){
 		ArrayList<Map<String,Integer>> data=DTree.importData();
-		ArrayList<String> result=IG.getRange(data, "XM");
+		DTree dt=new DTree();
+		ArrayList<String> result=dt.getRange(data, "XB");
 		System.out.println("getRange test: column XM");
 		for(String i:result){
 			System.out.print(i+" ");
@@ -68,8 +58,9 @@ public class Test {
 	//test count data
 	public static void testCountData(){
 		ArrayList<Map<String,Integer>> data=DTree.importData();
-		Map<String,Integer> resultMap=IG.countData(data, "XM");
-		System.out.println("countData test: Class");
+		DTree dt=new DTree();
+		Map<String,Integer> resultMap=dt.countData(data, "XH");
+		System.out.println("countData test: XG");
 		for(Map.Entry<String, Integer> entry: resultMap.entrySet()){
 			System.out.println("Key: "+entry.getKey()+" value: "+entry.getValue());
 		}
@@ -79,9 +70,10 @@ public class Test {
 	public static void testSplitDataSet(){
 		ArrayList<Map<String,Integer>> data=DTree.importData();
 		ArrayList<String> attribute=DTree.importAttribute();
-		IG ig=new IG(data,attribute);
+		DTree dt=new DTree();
+		//IG ig=new IG(data,attribute);
 		System.out.println("test splitDataSet on Class:");
-		ArrayList<Map<String,Integer>> result=ig.splitDataSet("Class",Integer.toString(1));
+		ArrayList<Map<String,Integer>> result=dt.splitDataSet(data,"XH",Integer.toString(1));
 		for (Map<String, Integer> l1 : result) {
 			for (Map.Entry<String, Integer> entry: l1.entrySet()) {
 				System.out.print("Key: " +entry.getKey()+ "value: "+entry.getValue()); 
@@ -89,11 +81,13 @@ public class Test {
 
 			System.out.println();
 		}
+		System.out.println(result.size());
 	}
 	
 	//test countLastColumn
 	public static void testCountLastColumn(){
-		Map<String,Integer> resultMap=DTree.countLastColumn(data);
+		DTree dt=new DTree();
+		Map<String,Integer> resultMap=dt.countLastColumn(data);
 		System.out.println("test countLastColumn:");
 		for(Map.Entry<String, Integer> entry: resultMap.entrySet()){
 			System.out.println("Key: "+entry.getKey()+" Value: "+entry.getValue());
@@ -101,34 +95,41 @@ public class Test {
 	}
 	
 	//test iniEntropy
-	public static void testIniEntropy(){
+	public static double testIniEntropy(){
 		ArrayList<Map<String,Integer>> data=DTree.importData();
-		Map<String,Integer> resultMap=DTree.countLastColumn(data);
-		IG ig=new IG(data,attribute);
-		double result=ig.iniEntropy(data.size(), resultMap);
+		DTree dt=new DTree();
+		Map<String,Integer> resultMap=dt.countLastColumn(data);
+		double result=dt.iniEntropy(data.size(), resultMap);
 		System.out.println("test iniEntropy:");
 		System.out.println("iniEntropy is: "+result);
+		return result;
 	}
 	
 	//test conditionalEntropy
 	public static void testConditionalEntropy(){
 		ArrayList<Map<String,Integer>> data=DTree.importData();
-		IG ig=new IG(data,attribute);
-		double result=ig.conditionalEntropy("Class");
-		System.out.println("choosing the first attribute to split: "+result);
+		DTree dt=new DTree();
+		double result=dt.conditionalEntropy(data,"XO");
+		System.out.println("conditional entropy is: "+result+" The gain is: "+(testIniEntropy()-result));
 	}
 	
 	//test bestAttribute
 	public static void testBestAttribute(){
 		ArrayList<Map<String,Integer>> data=DTree.importData();
-		IG ig=new IG(data,attribute);
-		Map<String,Integer> resultMap=DTree.countLastColumn(data);
-		double result=ig.iniEntropy(data.size(), resultMap);
-		String bestAttributeKey=ig.bestAttribute(result,attribute);
+		DTree dt=new DTree();
+		Map<String,Integer> resultMap=dt.countLastColumn(data);
+		double result=dt.iniEntropy(data.size(), resultMap);
+		String bestAttributeKey=dt.bestAttribute(data,result,attribute);
 		System.out.println("test bestAttribute");
 		System.out.println("The best attribute index is: "+bestAttributeKey);
 		
 	}
 	
-	
+	public static void testGetBestAttribute(){
+		ArrayList<Map<String,Integer>> data=DTree.importData();
+		ArrayList<String> attributes=DTree.importAttribute();
+		DTree dt=new DTree();
+		String result=dt.getBestAttribute(data, attributes);
+		System.out.println(result);
+	}
 }

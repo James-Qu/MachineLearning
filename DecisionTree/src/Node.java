@@ -4,13 +4,30 @@ import java.util.Map;
 class Node{
 	private String name; //split attribute name
 	private String label;
-	private ArrayList<Node> child=new ArrayList<Node>();
+	//private ArrayList<Node> child=new ArrayList<Node>(2);
+	private Node lChild=null;
+	private Node rChild=null;
 	private boolean isLeaf=false;
 	private ArrayList<Map<String, Integer>> data;
 	private ArrayList<String> attributeList;
 	private String splitOption; 
 	private ArrayList<String> splitValue;
-	private int upperBranchValue;
+	private String upperBranchValue;
+	private int key;
+	
+	public Node getlChild() {
+		return lChild;
+	}
+	public void setlChild(Node lChild) {
+		this.lChild = lChild;
+	}
+	public Node getrChild() {
+		return rChild;
+	}
+	public void setrChild(Node rChild) {
+		this.rChild = rChild;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -61,17 +78,23 @@ class Node{
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	public ArrayList<Node> getChild() {
+	/*public ArrayList<Node> getChild() {
 		return child;
 	}
 	public void setChild(ArrayList<Node> child) {
 		this.child = child;
-	}
-	public int getUpperBranchValue() {
+	}*/
+	public String getUpperBranchValue() {
 		return upperBranchValue;
 	}
-	public void setUpperBranchValue(int upperBranchValue) {
+	public void setUpperBranchValue(String upperBranchValue) {
 		this.upperBranchValue = upperBranchValue;
+	}
+	public int getKey() {
+		return key;
+	}
+	public void setKey(int key) {
+		this.key = key;
 	}
 
 	

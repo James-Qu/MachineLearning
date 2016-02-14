@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 class IG{
-	private ArrayList<Map<String,Integer>> data;
+	/*private ArrayList<Map<String,Integer>> data;
 	private ArrayList<String> attributeList;
 	public IG(ArrayList<Map<String,Integer>> data2, ArrayList<String> attributeList) {
 		this.data=data2;
@@ -38,17 +38,17 @@ class IG{
 	}
 
 	//get column range of assigned attribute
-	public static ArrayList<String> getRange(ArrayList<Map<String,Integer>> data,String attributeKey){
+	public ArrayList<String> getRange(ArrayList<Map<String,Integer>> data,String attributeKey){
 		ArrayList<String> range=new ArrayList<String>();
 		ArrayList<String> line=new ArrayList<String>();
 		String spcificData="";
-		/*for(int i=0;i<data.size();i++){
+		for(int i=0;i<data.size();i++){
 			line=data.get(i);
 			spcificData=line.get(index);
 			if(!range.contains(spcificData)){
 				range.add(spcificData);
 			}
-		}*/
+		}
 		for(int i=0;i<data.size();i++){
 			Map<String,Integer> record=data.get(i);
 			spcificData=record.get(attributeKey).toString();
@@ -61,7 +61,7 @@ class IG{
 	}
 
 	//count attribute data
-	public static Map<String,Integer> countData(ArrayList<Map<String,Integer>> data,String index){
+	public Map<String,Integer> countData(ArrayList<Map<String,Integer>> data,String index){
 		//ArrayList<String> instance=getRange(data,index);
 		Map<String,Integer> instance=new HashMap<String,Integer>();
 		Map<String,Integer> dataMap=new HashMap<String,Integer>();
@@ -103,7 +103,7 @@ class IG{
 		for(int i=0;i<dataRange.size();i++){
 			double zeroCount=0,oneCount=0;
 			ArrayList<Map<String, Integer>> subDataSet=splitDataSet(attribute, dataRange.get(i));
-			countMap=DTree.countLastColumn(subDataSet);
+			countMap=countLastColumn(subDataSet);
 			zeroCount=countMap.get(Integer.toString(0));
 			oneCount=countMap.get(Integer.toString(1));
 
@@ -139,13 +139,16 @@ class IG{
 		}
 		if(chosenAttribute==-1){
 			chosenAttribute=0;
+			
+			return "end";
+			
 			//System.out.println("attribute list is: "+attributeList);
 		}
 		return attributeList.get(chosenAttribute);
 	}
 
 	//Entropy calculation
-	public static double entropyCalculation(double zeroCount,double oneCount){
+	public double entropyCalculation(double zeroCount,double oneCount){
 		double result=0;
 		if(zeroCount==oneCount){
 			result=1;
@@ -159,5 +162,33 @@ class IG{
 		}
 		return result;
 	}
+	
+	//count last column copy
+	public Map<String,Integer> countLastColumn(ArrayList<Map<String, Integer>> data){
+
+		Map<String,Integer> result=new HashMap<String,Integer>(); //Store the result of the count
+		Map<String, Integer> record=new HashMap<String,Integer>(); 
+		int j=0;
+		int count=0;
+		while(data.size()>j){
+			record=data.get(j);
+			String temp=record.get("Class").toString();
+			if(result.containsKey(temp)){
+				result.put(temp,result.get(temp)+1);
+			}else{
+				result.put(temp, 1);
+			}
+			j++;
+		}
+		//if there is no 0 or 1 at the end. Add a value as 0.
+		if(!result.containsKey(Integer.toString(0))){
+			result.put(Integer.toString(0), 0);
+		}
+		if(!result.containsKey(Integer.toString(1))){
+			result.put(Integer.toString(1), 0);
+		}
+
+		return result;
+	}*/
 
 }

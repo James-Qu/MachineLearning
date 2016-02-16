@@ -14,7 +14,7 @@ class Node{
 	private ArrayList<String> splitValue;
 	private String upperBranchValue;
 	private int key;
-	
+	private ArrayList<String> splitRule=new ArrayList<String>();
 	public Node getlChild() {
 		return lChild;
 	}
@@ -95,6 +95,12 @@ class Node{
 	}
 	public void setKey(int key) {
 		this.key = key;
+	}
+	public ArrayList<String> getSplitRule() {
+		return splitRule;
+	}
+	public void setSplitRule(ArrayList<String> splitRule) {
+		this.splitRule = splitRule;
 	}
 
 	

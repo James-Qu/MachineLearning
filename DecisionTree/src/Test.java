@@ -2,8 +2,8 @@ import java.util.*;
 
 
 public class Test {
-	private static ArrayList<Map<String,Integer>> data=DTree.importData();
-	private static ArrayList<String> attribute=DTree.importAttribute();
+	private static ArrayList<Map<String,Integer>> data=DTree.importData("src/training_set.csv");
+	private static ArrayList<String> attribute=DTree.importAttribute("src/training_set.csv");
 	public static void main(String[] args) {
 		//testImportAttribute();
 		//testImportData();
@@ -19,7 +19,7 @@ public class Test {
 
 	//test importAttribute()
 	public static void testImportAttribute(){
-		ArrayList<String> attribute=DTree.importAttribute();
+		ArrayList<String> attribute=DTree.importAttribute("src/training_set.csv");
 		Iterator<String> it=attribute.iterator();
 		System.out.println("import attribute test:");
 		while(it.hasNext()){
@@ -31,7 +31,7 @@ public class Test {
 	//test importData()
 	public static void testImportData(){
 		//test import data
-		ArrayList<Map<String,Integer>> Data=DTree.importData();
+		ArrayList<Map<String,Integer>> Data=DTree.importData("src/training_set.csv");
 		System.out.println("import data test");
 		for (Map<String,Integer> l1 : Data) {
 			for (Map.Entry<String, Integer> entry:l1.entrySet()) {
@@ -45,7 +45,7 @@ public class Test {
 
 	//test getRange()
 	public static void testGetRange(){
-		ArrayList<Map<String,Integer>> data=DTree.importData();
+		ArrayList<Map<String,Integer>> data=DTree.importData("src/training_set.csv");
 		DTree dt=new DTree();
 		ArrayList<String> result=dt.getRange(data, "XB");
 		System.out.println("getRange test: column XM");
@@ -57,7 +57,7 @@ public class Test {
 	
 	//test count data
 	public static void testCountData(){
-		ArrayList<Map<String,Integer>> data=DTree.importData();
+		ArrayList<Map<String,Integer>> data=DTree.importData("src/training_set.csv");
 		DTree dt=new DTree();
 		Map<String,Integer> resultMap=dt.countData(data, "XH");
 		System.out.println("countData test: XG");
@@ -68,8 +68,7 @@ public class Test {
 	
 	//test splitDataSet
 	public static void testSplitDataSet(){
-		ArrayList<Map<String,Integer>> data=DTree.importData();
-		ArrayList<String> attribute=DTree.importAttribute();
+		ArrayList<Map<String,Integer>> data=DTree.importData("src/training_set.csv");
 		DTree dt=new DTree();
 		//IG ig=new IG(data,attribute);
 		System.out.println("test splitDataSet on Class:");
@@ -96,7 +95,7 @@ public class Test {
 	
 	//test iniEntropy
 	public static double testIniEntropy(){
-		ArrayList<Map<String,Integer>> data=DTree.importData();
+		ArrayList<Map<String,Integer>> data=DTree.importData("src/training_set.csv");
 		DTree dt=new DTree();
 		Map<String,Integer> resultMap=dt.countLastColumn(data);
 		double result=dt.iniEntropy(data.size(), resultMap);
@@ -107,7 +106,7 @@ public class Test {
 	
 	//test conditionalEntropy
 	public static void testConditionalEntropy(){
-		ArrayList<Map<String,Integer>> data=DTree.importData();
+		ArrayList<Map<String,Integer>> data=DTree.importData("src/training_set.csv");
 		DTree dt=new DTree();
 		double result=dt.conditionalEntropy(data,"XO");
 		System.out.println("conditional entropy is: "+result+" The gain is: "+(testIniEntropy()-result));
@@ -115,7 +114,7 @@ public class Test {
 	
 	//test bestAttribute
 	public static void testBestAttribute(){
-		ArrayList<Map<String,Integer>> data=DTree.importData();
+		ArrayList<Map<String,Integer>> data=DTree.importData("src/training_set.csv");
 		DTree dt=new DTree();
 		Map<String,Integer> resultMap=dt.countLastColumn(data);
 		double result=dt.iniEntropy(data.size(), resultMap);
@@ -126,8 +125,8 @@ public class Test {
 	}
 	
 	public static void testGetBestAttribute(){
-		ArrayList<Map<String,Integer>> data=DTree.importData();
-		ArrayList<String> attributes=DTree.importAttribute();
+		ArrayList<Map<String,Integer>> data=DTree.importData("src/training_set.csv");
+		ArrayList<String> attributes=DTree.importAttribute("src/training_set.csv");
 		DTree dt=new DTree();
 		String result=dt.getBestAttribute(data, attributes);
 		System.out.println(result);

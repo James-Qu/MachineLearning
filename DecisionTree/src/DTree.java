@@ -4,12 +4,19 @@ import java.io.*;
 
 
 public class DTree {
-	private static boolean[] attributeIsUsed;
 	private static int keyGenerator=0;
 
+	public static int getKeyGenerator() {
+		return keyGenerator;
+	}
+
+	public static void setKeyGenerator(int keyGenerator) {
+		DTree.keyGenerator = keyGenerator;
+	}
+
 	//tested
-	public static ArrayList<String> importAttribute(){
-		File file=new File("src/training_set.csv");
+	public static ArrayList<String> importAttribute(String path){
+		File file=new File(path);
 		FileReader fr=null;
 		String[] temp=new String[20];
 		ArrayList<String> attribute=new ArrayList<String>();
@@ -34,9 +41,9 @@ public class DTree {
 	}
 
 	//tested
-	public static ArrayList<Map<String, Integer>> importData(){
+	public static ArrayList<Map<String, Integer>> importData(String path){
 		ArrayList<Map<String, Integer>> data=new ArrayList<Map<String,Integer>>();
-		File file=new File("src/training_set.csv");
+		File file=new File(path);
 		FileReader fr;
 		String line=null;
 		String[] temp=new String[21];
@@ -78,7 +85,6 @@ public class DTree {
 		Map<String,Integer> result=new HashMap<String,Integer>(); //Store the result of the count
 		Map<String, Integer> record=new HashMap<String,Integer>(); 
 		int j=0;
-		int count=0;
 		while(data.size()>j){
 			record=data.get(j);
 			String temp=record.get("Class").toString();
@@ -109,88 +115,6 @@ public class DTree {
 		return false;
 	}
 
-	/*public Node createDTree(ArrayList<ArrayList<String>> data,ArrayList<String> attributeList){
-		Node node=new Node();
-		node.setData(data);
-		node.setAttribute(attributeList);
-		Map<String,Integer> countMap=DTree.countLastColumn(data);
-		double iniEntropy=-1;
-		int chosenAttribute=-1;
-		//Node is pure
-		//we need to scan the map to see if there is a 0 value count instead of using countMap.size<2
-		if(scanCountMap(countMap)){
-			//divide(node, countMap);
-			for(Map.Entry<String, Integer> entry:countMap.entrySet()){
-				if(entry.getValue()>0){
-					if(entry.getKey().equals("0")){
-						node.setName("0");
-						break;
-					}else{
-						node.setName("1");
-						break;
-					}
-				}
-			}
-			node.setLeaf(true);
-			node.setlChild(null);
-			node.setrChild(null);
-
-			return node;
-		}
-		IG ig=new IG(data,attributeList);
-		iniEntropy=ig.iniEntropy(data.size(), countMap);
-		if(!Double.isNaN(iniEntropy)){
-			//if(chosenAttribute!=-1){
-			chosenAttribute=ig.bestAttribute(iniEntropy);
-			//}else{
-			if(chosenAttribute==-1){
-				node.setLeaf(true);
-				node.setlChild(null);
-				node.setrChild(null);
-				return node;
-			}
-			return node;
-			//}
-		}
-		ArrayList<String> splitValue=IG.getRange(data, chosenAttribute);
-		node.setSplitValue(splitValue); 
-		//set chosen attribute for the node
-		node.setSplitOption(attributeList.get(chosenAttribute));
-		node.setName(attributeList.get(chosenAttribute));
-		//delete chosenattribute from the list
-		attributeList.remove(chosenAttribute);
-
-		int j=0;
-		while(splitValue.size()>j){
-			String value=splitValue.get(j);
-			ArrayList<ArrayList<String>> subData=ig.splitDataSet(chosenAttribute, value);
-			if(attributeList.size()==0){
-				//Node leaf=new Node();
-				node.setName(Integer.toString(getMajority(countMap)));
-				node.setLeaf(true);
-				node.setlChild(null);
-				node.setrChild(null);
-				if(Integer.parseInt(value)==1){
-					node.setrChild(leaf);;
-				}else{
-					node.setlChild(leaf);
-				}
-			}else{
-				if(node.isLeaf()==false){
-					if(Integer.parseInt(value)==0){
-						node.setlChild(createDTree(subData,attributeList));
-					}else{
-						node.setrChild(createDTree(subData,attributeList));
-					}
-				}
-			}
-			j++;
-		}
-
-		return node;
-	}*/
-
-
 
 	//get majority when attribute all used.
 	public String getMajority(Map<String,Integer> lastColumnCountMap){
@@ -206,7 +130,6 @@ public class DTree {
 				majority=key;
 			}
 		}
-
 
 		return majority;
 	}
@@ -246,14 +169,14 @@ public class DTree {
 		Node node=new Node();
 		node.setKey(keyGenerator++);
 
-		if(keyGenerator==41){
+		/*if(keyGenerator==41){
 			System.out.println("This is node 40");
 			System.out.println("data on this node is:");
 			System.out.println(data);
 			System.out.println("attributelist is:");
 			System.out.println(attributes);
-		}
-		System.out.println("node number: "+keyGenerator);
+		}*/
+		//System.out.println("node number: "+keyGenerator);
 		node.setData(data);
 		node.setAttributeList(attributes);
 		String chosenAttribute = "";
@@ -261,16 +184,16 @@ public class DTree {
 
 		//if all data + or -, return single node
 		if(scanCountMap(countMap)){
-			System.out.println("should follow by LEAF");
+			//System.out.println("should follow by LEAF");
 			for(Map.Entry<String, Integer> entry:countMap.entrySet()){
 				if(entry.getValue()>0){
 					if(entry.getKey().equals("0")){
-						System.out.println("left LEAF");
+						//System.out.println("left LEAF");
 						node.setName("leaf");
 						node.setLabel("0");
 						break;
 					}else{
-						System.out.println("right LEAF");
+						//System.out.println("right LEAF");
 						node.setName("leaf");
 						node.setLabel("1");
 						break;
@@ -283,7 +206,7 @@ public class DTree {
 
 		//if attributes empty. return single node
 		if(attributes.size()==0){
-			System.out.println("this node is a LEAF ");
+			//System.out.println("this node is a LEAF ");
 			node.setName("leaf:");
 			node.setLabel(getMajority(countMap));
 			node.setLeaf(true);
@@ -296,7 +219,7 @@ public class DTree {
 		}*/
 		//several attribute left, no ig.
 		if(chosenAttribute.equals("end")){
-			System.out.println("this node is also a LEAF ");
+			//System.out.println("this node is also a LEAF ");
 			node.setName("leaf:");
 			node.setLabel(getMajority(countMap));
 			node.setLeaf(true);
@@ -329,15 +252,18 @@ public class DTree {
 				if(node.isLeaf()==false){
 					
 					if(value.equals("0")){
-						//node.getChild().add(0, createTree(subData,attributes));
 						node.setlChild(createTree(subData,subAttributes));
-						//node.getlChild().setUpperBranchValue(value);
+						//String rule=chosenAttribute+":0";
+						//node.getlChild().getSplitRule().add(rule);
+						//ArrayList<String> temp=node.getlChild().getSplitRule();
+						//System.out.println();
 					}else{
-						//node.getChild().add(1, createTree(subData, attributes));
 						node.setrChild(createTree(subData, subAttributes));
 						//node.getrChild().setUpperBranchValue(value);
+						//String rule=chosenAttribute+":1";
+						//node.getlChild().getSplitRule().add(rule);
+						//ArrayList<String> temp=node.getrChild().getSplitRule();
 					}
-					//node.getChild().add(createTree(subData,attributes));
 				}
 			}
 			j++;
@@ -345,6 +271,7 @@ public class DTree {
 		return node;
 	}
 
+	
 
 
 	//Moved from IG
@@ -507,4 +434,75 @@ public class DTree {
 		chosenAttribute=bestAttribute(data,iniEntropy,attributes);
 		return chosenAttribute;
 	}
+
+	//calculate the accuracy of tree.
+	public double getAccuracy(Node node,ArrayList<Map<String,Integer>> data){
+		Node originNode=node;
+		String attribute="";
+		Integer dataSetActual=null;
+		double correctCount=0,errorCount=0;
+		double accuracy=0;
+		for(int i=0;i<data.size();i++){
+			Map<String,Integer> instance=data.get(i);
+			while(node.isLeaf()==false){
+				attribute=node.getName();
+				dataSetActual=instance.get(attribute);
+				if(dataSetActual==0){
+					node=node.getlChild();
+				}else if(dataSetActual==1){
+					node=node.getrChild();
+				}
+			}
+			int label=Integer.parseInt(node.getLabel());
+			Integer actual=instance.get("Class");
+			if(label==actual){
+				correctCount++;
+			}else{
+				errorCount++;
+			}
+			node=originNode;
+		}
+		accuracy=correctCount/(double)data.size();
+		System.out.println("The correct instance is:"+correctCount+" The wrong instance is:"+errorCount);
+		return accuracy;
+	}
+	
+	//prune method
+	public void prune(Node node,int howManyNodes){
+		Node originNode=node;
+		ArrayList<Integer> randomNodes=new ArrayList<Integer>();
+		for(int i=0;i<howManyNodes;i++){
+			int random=(int)(Math.random()*275);
+			randomNodes.add((int)(Math.random()*275));
+			searchNode(node, randomNodes.get(i));
+			addLabelAfterPrune(node, randomNodes.get(i));
+			node=originNode;
+		}
+		
+		
+	}
+	
+	//search node function
+	public void searchNode(Node node,int key){
+		int nodeKey=node.getKey();
+		if(node.getKey()==key){
+			node.setLeaf(true);
+			return;
+		}
+		searchNode(node.getlChild(),key);
+		searchNode(node.getrChild(), key);
+	}
+	
+	//add label after prune
+	public void addLabelAfterPrune(Node node,int key){
+		if(node.getKey()==key){
+			ArrayList<Map<String,Integer>> nodeData=node.getData();
+			Map<String,Integer> countLastColumnMap=countLastColumn(nodeData);
+			String majority=getMajority(countLastColumnMap);
+			node.setLabel(majority);
+		}
+		addLabelAfterPrune(node.getlChild(), key);
+		addLabelAfterPrune(node.getrChild(), key);
+	}
+	
 }

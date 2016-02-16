@@ -59,10 +59,8 @@ public class DTree {
 
 			while((line=br.readLine())!=null){
 				String[] temp1=line.split(",");
-				//ArrayList<String> record = new ArrayList<String>();
 				Map<String,Integer> record=new HashMap<String,Integer>();
 				for(int i=0;i<temp1.length;i++){
-					//record.add(temp1[i]);
 					record.put(temp[i], Integer.parseInt(temp1[i]));
 				}
 				data.add(record);
@@ -168,15 +166,6 @@ public class DTree {
 		//create a root node for tree
 		Node node=new Node();
 		node.setKey(keyGenerator++);
-
-		/*if(keyGenerator==41){
-			System.out.println("This is node 40");
-			System.out.println("data on this node is:");
-			System.out.println(data);
-			System.out.println("attributelist is:");
-			System.out.println(attributes);
-		}*/
-		//System.out.println("node number: "+keyGenerator);
 		node.setData(data);
 		node.setAttributeList(attributes);
 		String chosenAttribute = "";
@@ -184,16 +173,13 @@ public class DTree {
 
 		//if all data + or -, return single node
 		if(scanCountMap(countMap)){
-			//System.out.println("should follow by LEAF");
 			for(Map.Entry<String, Integer> entry:countMap.entrySet()){
 				if(entry.getValue()>0){
 					if(entry.getKey().equals("0")){
-						//System.out.println("left LEAF");
 						node.setName("leaf");
 						node.setLabel("0");
 						break;
 					}else{
-						//System.out.println("right LEAF");
 						node.setName("leaf");
 						node.setLabel("1");
 						break;
@@ -206,7 +192,6 @@ public class DTree {
 
 		//if attributes empty. return single node
 		if(attributes.size()==0){
-			//System.out.println("this node is a LEAF ");
 			node.setName("leaf:");
 			node.setLabel(getMajority(countMap));
 			node.setLeaf(true);
@@ -214,12 +199,8 @@ public class DTree {
 		}
 
 		chosenAttribute=getBestAttribute(data, attributes);
-		/*if(attributes.size()!=0){
-			attributes.remove(chosenAttribute); 
-		}*/
 		//several attribute left, no ig.
 		if(chosenAttribute.equals("end")){
-			//System.out.println("this node is also a LEAF ");
 			node.setName("leaf:");
 			node.setLabel(getMajority(countMap));
 			node.setLeaf(true);
@@ -250,19 +231,11 @@ public class DTree {
 					subAttributes.addAll(attributes);
 				}
 				if(node.isLeaf()==false){
-					
+
 					if(value.equals("0")){
 						node.setlChild(createTree(subData,subAttributes));
-						//String rule=chosenAttribute+":0";
-						//node.getlChild().getSplitRule().add(rule);
-						//ArrayList<String> temp=node.getlChild().getSplitRule();
-						//System.out.println();
 					}else{
 						node.setrChild(createTree(subData, subAttributes));
-						//node.getrChild().setUpperBranchValue(value);
-						//String rule=chosenAttribute+":1";
-						//node.getlChild().getSplitRule().add(rule);
-						//ArrayList<String> temp=node.getrChild().getSplitRule();
 					}
 				}
 			}
@@ -271,10 +244,9 @@ public class DTree {
 		return node;
 	}
 
-	
 
 
-	//Moved from IG
+
 	//calculate initial entropy
 	public double iniEntropy(int dataSize, Map<String,Integer> countMap){
 		double result=0;
@@ -294,13 +266,6 @@ public class DTree {
 		ArrayList<String> line=new ArrayList<String>();
 		String spcificData="";
 		int temp=-1,max=-1;
-		/*for(int i=0;i<data.size();i++){
-				line=data.get(i);
-				spcificData=line.get(index);
-				if(!range.contains(spcificData)){
-					range.add(spcificData);
-				}
-			}*/
 		for(int i=0;i<data.size();i++){
 			Map<String,Integer> record=data.get(i);
 			spcificData=record.get(attributeKey).toString();
@@ -309,22 +274,11 @@ public class DTree {
 			}
 		}
 		Collections.sort(range);
-		/*if(range.size()<2){
-				return range;
-			}
-			for(int i=0;i<range.size();i++){
-				temp=Integer.parseInt(range.get(i));
-				if(temp>max){
-					max=temp;
-				}
-			}*/
-
 		return range;
 	}
 
 	//count attribute data
 	public Map<String,Integer> countData(ArrayList<Map<String,Integer>> data,String index){
-		//ArrayList<String> instance=getRange(data,index);
 		Map<String,Integer> instance=new HashMap<String,Integer>();
 		Map<String,Integer> dataMap=new HashMap<String,Integer>();
 		String specificData;
@@ -383,30 +337,22 @@ public class DTree {
 		double max=0,ig=0;
 		int j=0;
 		String attributeName="";
-		//double secondBestIG=0;
 
 		while(attributeList.size()>j){
 			String attributeKey=attributeList.get(j);
 			max=iniEntropy-conditionalEntropy(data,attributeKey);
-			//System.out.println("iniEntropy is: "+iniEntropy+"| current max: "+max  + "|" + " This round ig is: "+ig);
 
 			if(max>ig){
-				//secondBestIG=ig;
 				ig=max;
 				chosenAttribute=j;
 				attributeName=attributeList.get(chosenAttribute);
 			}
 			j++;
-			//System.out.println("chosenAttribute is:"+chosenAttribute+" attri name is: "+attributeName+" attribute list is: "+attributeList);
 		}
 		if(chosenAttribute==-1){
 			chosenAttribute=0;
-			//System.out.println("attribute=-1, no more ig. should add leaf node");
 			return "end";
-
-			//System.out.println("attribute list is: "+attributeList);
 		}
-		//System.out.println("The best attribute is: "+ attributeList.get(chosenAttribute));
 		return attributeList.get(chosenAttribute);
 	}
 
@@ -463,10 +409,10 @@ public class DTree {
 			node=originNode;
 		}
 		accuracy=correctCount/(double)data.size();
-		System.out.println("The correct instance is:"+correctCount+" The wrong instance is:"+errorCount);
+		System.out.println("The correct instance is: "+correctCount+". The wrong instance is: "+errorCount);
 		return accuracy;
 	}
-	
+
 	//prune method
 	public void prune(Node node,int howManyNodes){
 		Node originNode=node;
@@ -478,10 +424,10 @@ public class DTree {
 			addLabelAfterPrune(node, random);
 			node=originNode;
 		}
-		
-		
+
+
 	}
-	
+
 	//search node function
 	public void searchNode(Node node,int key){
 		int nodeKey=node.getKey();
@@ -495,7 +441,7 @@ public class DTree {
 		searchNode(node.getlChild(),key);
 		searchNode(node.getrChild(), key);
 	}
-	
+
 	//add label after prune
 	public void addLabelAfterPrune(Node node,int key){
 		if(node.getKey()==key){
@@ -510,5 +456,5 @@ public class DTree {
 		addLabelAfterPrune(node.getlChild(), key);
 		addLabelAfterPrune(node.getrChild(), key);
 	}
-	
+
 }

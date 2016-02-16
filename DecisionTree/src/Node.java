@@ -4,7 +4,6 @@ import java.util.Map;
 class Node{
 	private String name; //split attribute name
 	private String label;
-	//private ArrayList<Node> child=new ArrayList<Node>(2);
 	private Node lChild=null;
 	private Node rChild=null;
 	private boolean isLeaf=false;
@@ -27,7 +26,7 @@ class Node{
 	public void setrChild(Node rChild) {
 		this.rChild = rChild;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -35,7 +34,7 @@ class Node{
 		this.name = name;
 	}
 
-	
+
 	public ArrayList<String> getAttributeList() {
 		return attributeList;
 	}
@@ -78,12 +77,6 @@ class Node{
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	/*public ArrayList<Node> getChild() {
-		return child;
-	}
-	public void setChild(ArrayList<Node> child) {
-		this.child = child;
-	}*/
 	public String getUpperBranchValue() {
 		return upperBranchValue;
 	}
@@ -103,6 +96,6 @@ class Node{
 		this.splitRule = splitRule;
 	}
 
-	
-	
+
+
 }

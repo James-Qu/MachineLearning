@@ -401,12 +401,12 @@ public class DTree {
 		}
 		if(chosenAttribute==-1){
 			chosenAttribute=0;
-			System.out.println("attribute=-1, no more ig. should add leaf node");
+			//System.out.println("attribute=-1, no more ig. should add leaf node");
 			return "end";
 
 			//System.out.println("attribute list is: "+attributeList);
 		}
-		System.out.println("The best attribute is: "+ attributeList.get(chosenAttribute));
+		//System.out.println("The best attribute is: "+ attributeList.get(chosenAttribute));
 		return attributeList.get(chosenAttribute);
 	}
 
@@ -473,9 +473,9 @@ public class DTree {
 		ArrayList<Integer> randomNodes=new ArrayList<Integer>();
 		for(int i=0;i<howManyNodes;i++){
 			int random=(int)(Math.random()*275);
-			randomNodes.add((int)(Math.random()*275));
-			searchNode(node, randomNodes.get(i));
-			addLabelAfterPrune(node, randomNodes.get(i));
+			randomNodes.add(random);
+			searchNode(node, random);
+			addLabelAfterPrune(node, random);
 			node=originNode;
 		}
 		
@@ -489,6 +489,9 @@ public class DTree {
 			node.setLeaf(true);
 			return;
 		}
+		if(node.isLeaf()==true){
+			return;
+		}
 		searchNode(node.getlChild(),key);
 		searchNode(node.getrChild(), key);
 	}
@@ -500,6 +503,9 @@ public class DTree {
 			Map<String,Integer> countLastColumnMap=countLastColumn(nodeData);
 			String majority=getMajority(countLastColumnMap);
 			node.setLabel(majority);
+		}
+		if(node.isLeaf()==true){
+			return;
 		}
 		addLabelAfterPrune(node.getlChild(), key);
 		addLabelAfterPrune(node.getrChild(), key);

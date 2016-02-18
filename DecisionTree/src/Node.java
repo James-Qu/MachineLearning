@@ -14,6 +14,7 @@ class Node{
 	private String upperBranchValue;
 	private int key;
 	private ArrayList<String> splitRule=new ArrayList<String>();
+	private int depth=0;
 	public Node getlChild() {
 		return lChild;
 	}
@@ -94,6 +95,12 @@ class Node{
 	}
 	public void setSplitRule(ArrayList<String> splitRule) {
 		this.splitRule = splitRule;
+	}
+	public int getDepth() {
+		return depth;
+	}
+	public void setDepth(int depth) {
+		this.depth = depth;
 	}
 
 

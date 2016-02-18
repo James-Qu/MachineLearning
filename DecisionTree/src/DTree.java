@@ -4,16 +4,30 @@ import java.io.*;
 
 
 public class DTree {
-	private static int keyGenerator=0;
-
-	public static int getKeyGenerator() {
+	private int keyGenerator=0;
+	private int randomLeafCount=0;
+	private int randomDepthSum=0;
+	public int getRandomLeafCount() {
+		return randomLeafCount;
+	}
+	public void setRandomLeafCount(int randomLeafCount) {
+		this.randomLeafCount = randomLeafCount;
+	}
+	public int getKeyGenerator() {
 		return keyGenerator;
 	}
-
-	public static void setKeyGenerator(int keyGenerator) {
-		DTree.keyGenerator = keyGenerator;
+	public void setKeyGenerator(int keyGenerator) {
+		this.keyGenerator = keyGenerator;
 	}
-
+	private int leafCount=0;
+	
+	private int depthCountSum=0;
+	public int getDepthCount() {
+		return depthCountSum;
+	}
+	public void setDepthCount(int depthCount) {
+		this.depthCountSum = depthCount;
+	}
 	//tested
 	public static ArrayList<String> importAttribute(String path){
 		File file=new File(path);
@@ -142,7 +156,9 @@ public class DTree {
 		}
 		System.out.print(root.getName()+"=0 :");
 		if(root.getlChild().isLeaf()==true){
-			System.out.println(root.getlChild().getLabel());
+			System.out.println(root.getlChild().getLabel()+" Depth:"+level);
+			randomDepthSum+=(level+1);
+			depthCountSum+=(level+1);
 		}else{
 			System.out.println();
 			printTree(root.getlChild(),level+1);
@@ -153,7 +169,9 @@ public class DTree {
 		}
 		System.out.print(root.getName()+"=1 :");
 		if(root.getrChild().isLeaf()==true){
-			System.out.println(root.getrChild().getLabel());
+			System.out.println(root.getrChild().getLabel()+" Depth:"+level);
+			randomDepthSum+=(level+1);
+			depthCountSum+=(level+1);
 		}else{
 			System.out.println();
 			printTree(root.getrChild(), level+1);
@@ -187,6 +205,7 @@ public class DTree {
 				}
 			}
 			node.setLeaf(true);
+			leafCount++;
 			return node;
 		}
 
@@ -195,6 +214,7 @@ public class DTree {
 			node.setName("leaf:");
 			node.setLabel(getMajority(countMap));
 			node.setLeaf(true);
+			leafCount++;
 			return node;
 		}
 
@@ -204,10 +224,31 @@ public class DTree {
 			node.setName("leaf:");
 			node.setLabel(getMajority(countMap));
 			node.setLeaf(true);
+			leafCount++;
 			return node;
 		}
 
 		ArrayList<String> splitValue=getRange(data, chosenAttribute);
+
+		//fix
+		if(splitValue.size()<2){
+			//System.out.println("in the fix");
+			String value=splitValue.get(0);
+			if(value.equals("1")){
+				Node leaf=new Node();
+				leaf.setLabel("0");
+				leaf.setLeaf(true);
+				node.setlChild(leaf);
+			}else{
+				Node leaf=new Node();
+				leaf.setLabel("1");
+				leaf.setLeaf(true);
+				node.setrChild(leaf);
+			}
+			leafCount++;
+			//return node;
+		}
+
 		node.setSplitValue(splitValue); 
 		int j=0;
 		while(splitValue.size()>j){
@@ -219,6 +260,7 @@ public class DTree {
 				leaf.setName("leaf:");
 				leaf.setLabel(getMajority(countMap));
 				leaf.setLeaf(true);
+				leafCount++;
 				if(value.equals("0")){
 					node.setlChild(leaf);
 				}else{
@@ -456,5 +498,134 @@ public class DTree {
 		addLabelAfterPrune(node.getlChild(), key);
 		addLabelAfterPrune(node.getrChild(), key);
 	}
+
+	//Randomly choose attribute to create tree.
+	public Node createRandomTree(ArrayList<Map<String, Integer>> data,
+			ArrayList<String> attributes){
+		Set<String> subAttributes=new HashSet<String>();
+		//create a root node for tree
+		Node node=new Node();
+		node.setKey(keyGenerator++);
+		node.setData(data);
+		node.setAttributeList(attributes);
+		//node.setDepth(depth);
+		String chosenAttribute = "";
+		Map<String,Integer> countMap=countLastColumn(data);
+
+		//if all data + or -, return single node
+		if(scanCountMap(countMap)){
+			for(Map.Entry<String, Integer> entry:countMap.entrySet()){
+				if(entry.getValue()>0){
+					if(entry.getKey().equals("0")){
+						node.setName("leaf");
+						node.setLabel("0");
+						break;
+					}else{
+						node.setName("leaf");
+						node.setLabel("1");
+						break;
+					}
+				}
+			}
+			node.setLeaf(true);
+			randomLeafCount++;
+			return node;
+		}
+
+		//if attributes empty. return single node
+		if(attributes.size()==0){
+			node.setName("leaf:");
+			node.setLabel(getMajority(countMap));
+			node.setLeaf(true);
+			randomLeafCount++;
+			return node;
+		}
+
+		//chosenAttribute=getBestAttribute(data, attributes);
+		int randomAttribute=(int)(Math.random()*attributes.size());
+		chosenAttribute=attributes.get(randomAttribute);
+		//System.out.println("chosen attribute is: "+chosenAttribute);
+		//several attribute left, no ig.
+		if(chosenAttribute.equals("end")){
+			node.setName("leaf:");
+			node.setLabel(getMajority(countMap));
+			node.setLeaf(true);
+			randomAttribute++;
+			return node;
+		}
+
+		ArrayList<String> splitValue=getRange(data, chosenAttribute);
+		node.setSplitValue(splitValue); 
+		int j=0;
+
+		//fix
+		if(splitValue.size()<2){
+			//System.out.println("in the fix");
+			String value=splitValue.get(0);
+			if(value.equals("1")){
+				Node leaf=new Node();
+				leaf.setLabel("0");
+				leaf.setLeaf(true);
+				node.setlChild(leaf);
+			}else{
+				Node leaf=new Node();
+				leaf.setLabel("1");
+				leaf.setLeaf(true);
+				node.setrChild(leaf);
+			}
+			randomLeafCount++;
+			//return node;
+		}
+
+		while(splitValue.size()>j){
+			String value=splitValue.get(j);
+			ArrayList<Map<String,Integer>> subData=splitDataSet(data,chosenAttribute, value);
+			if(subData.size()==0){
+				Node leaf=new Node();
+				leaf.setKey(keyGenerator++);
+				leaf.setName("leaf:");
+				leaf.setLabel(getMajority(countMap));
+				//	leaf.setLabel("");
+				leaf.setLeaf(true);
+				randomLeafCount++;
+				//leaf.setDepth(depth+1);
+				if(value.equals("0")){
+					node.setlChild(leaf);
+				}else{
+					node.setrChild(leaf);
+				}
+			}else{
+				node.setName(chosenAttribute);
+				if(attributes.size()!=0){
+					attributes.remove(chosenAttribute); 
+					subAttributes.addAll(attributes);
+				}
+				if(node.isLeaf()==false){
+					ArrayList<String> list = new ArrayList<String>(subAttributes);
+					if(value.equals("0")){
+						node.setlChild(createRandomTree(subData,list));
+					}else{
+						node.setrChild(createRandomTree(subData, list));
+					}
+				}
+			}
+			j++;
+		}
+		return node;
+	}
+	public int getRandomDepthSum() {
+		return randomDepthSum;
+	}
+	public void setRandomDepthSum(int randomDepthSum) {
+		this.randomDepthSum = randomDepthSum;
+	}
+	public int getLeafCount() {
+		return leafCount;
+	}
+	public void setLeafCount(int leafCount) {
+		this.leafCount = leafCount;
+	}
+
+
 
 }
